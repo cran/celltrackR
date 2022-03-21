@@ -4,23 +4,28 @@
 \alias{distanceCells}
 \title{Minimum Distance between Two Cells}
 \usage{
-distanceCells(X, cellids)
+distanceCells(X, cellids, quietly = FALSE)
 }
 \arguments{
 \item{X}{a tracks object}
 
-\item{cellids}{a vector of two indices specifying the tracks to compute distance between.}
+\item{cellids}{a vector of two indices specifying the tracks to compute distance between, or
+a dataframe/matrix of two columns (where every row contains a pair of cellids to compute 
+a distance for)}
+
+\item{quietly}{if TRUE, suppress warnings about returning NA distances.}
 }
 \value{
-A single distance, or NA if the the tracks do not have overlapping timepoints.
+A single distance (NA if the the tracks do not have overlapping timepoints), or 
+a vector of such distances if multiple pairs are supplied in \code{cellids}.
 }
 \description{
 Compute the minimum distance between two cells in the dataset (minimum over all)
 the timepoints where they were both measured.
 }
 \examples{
-## Find the minimum distance between the tracks with ids 1 and 2
-distanceCells( TCells, c("1","2") )
+## Find the minimum distance between the tracks with ids 1 and 3
+distanceCells( TCells, c("1","3") )
 }
 \seealso{
 \code{\link{angleCells}} to compute the angle between the track displacement vectors,

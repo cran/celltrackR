@@ -4,12 +4,23 @@
 \alias{analyzeStepPairs}
 \title{Find Distances and Angles for all Pairs of Steps}
 \usage{
-analyzeStepPairs(X, filter.steps = NULL, ...)
+analyzeStepPairs(
+  X,
+  filter.steps = NULL,
+  searchRadius = Inf,
+  quietly = FALSE,
+  ...
+)
 }
 \arguments{
 \item{X}{a tracks object}
 
 \item{filter.steps}{optional: a function used to filter steps on. See examples.}
+
+\item{searchRadius}{if specified, only return analysis for pairs of steps that
+start within distance searchRadius from each other}
+
+\item{quietly}{(default FALSE) if TRUE, suppress warnings}
 
 \item{...}{further arguments passed on to \code{angleSteps}}
 }
@@ -31,8 +42,8 @@ and \code{\link{distanceSteps}}.
 }
 \examples{
 ## Plot distance versus angle for all step pairs, filtering for those that
-## displace at least 2 microns
-pairs <- analyzeStepPairs( TCells, filter.steps = function(t) displacement(t) > 2 )
+## displace at least 2 microns. Sample dataset in this example for speed.
+pairs <- analyzeStepPairs( sample( TCells, 100), filter.steps = function(t) displacement(t) > 2 )
 scatter.smooth( pairs$dist, pairs$angle )
 }
 \references{

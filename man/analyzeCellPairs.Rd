@@ -4,20 +4,28 @@
 \alias{analyzeCellPairs}
 \title{Find Distances and Angles for all Pairs of Tracks}
 \usage{
-analyzeCellPairs(X, ...)
+analyzeCellPairs(X, searchRadius = Inf, quietly = FALSE, ...)
 }
 \arguments{
 \item{X}{a tracks object}
+
+\item{searchRadius}{if specified, only return analysis for pairs of cells that
+are within distance searchRadius from each other at least at one point in time.}
+
+\item{quietly}{(default FALSE) if TRUE, suppress warnings}
 
 \item{...}{further arguments passed on to \code{angleCells}}
 }
 \value{
 A dataframe with four columns: two for the indices of cellpairs,
-one for the distance between them, and one for their angle.
+one for the distance between them, and one for their angle. Note that the 
+distance will be NA for pairs of tracks that do not share time points, but
+their angle will still be computed.
 }
 \description{
 Find all pairs of cells and return the shortest distance between them at any
-point, as well as the angle between their overall displacement vectors.
+point in time (if they share any time points), as well as the angle between 
+their overall displacement vectors.
 }
 \details{
 Analyzing track angles at different distances can be useful to detect
@@ -27,8 +35,8 @@ Internally, the function uses \code{\link{cellPairs}}, \code{\link{angleCells}},
 and \code{\link{distanceCells}}.
 }
 \examples{
-## Plot distance versus angle for all cell pairs
-pairs <- analyzeCellPairs( TCells )
+## Plot distance versus angle for all cell pairs. Sample T-cell data here for speed.
+pairs <- analyzeCellPairs( sample( TCells, 100 ) )
 scatter.smooth( pairs$dist, pairs$angle )
 }
 \references{

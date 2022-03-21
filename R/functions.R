@@ -394,6 +394,7 @@ normalizeToDuration <- function(x) {
 #'
 #' @importFrom stats aggregate
 #'
+#' @aliases aggregate
 #' @export
 aggregate.tracks <- function( x, measure, by="subtracks", FUN=mean,
     subtrack.length=seq(1, (maxTrackLength(x)-1)),
@@ -750,14 +751,14 @@ timeStep <- function( x, FUN=median, na.rm=FALSE ){
 #' Interpolate Track Positions
 #'
 #' Approximates the track positions at given time points using linear interpolation
-#' (via the \code{\link[stats]{approx}} function).
+#' (via the \code{\link[stats:approxfun]{approx}} function).
 #'
 #' @param x the input track (a matrix or data frame).
 #' @param t the times at which to approximate track positions. These must lie
 #' within the interval spanned by the track timepoints.
 #' @param how specifies how to perform the interpolation. Possible values are
-#' \code{"linear"} (which uses \code{\link[stats]{approx}} with default values) and
-#' \code{"spline"} (which uses \code{\link[stats]{spline}} with default values).
+#' \code{"linear"} (which uses \code{\link[stats:approxfun]{approx}} with default values) and
+#' \code{"spline"} (which uses \code{\link[stats:splinefun]{spline}} with default values).
 #'
 #' @examples
 #' ## Compare interpolated and non-interpolated versions of a track
@@ -823,6 +824,6 @@ subsample <- function( x, k=2 ){
 #' @export
 timePoints <- function( X )
 {
-  timepoints.per.track <- sapply( X, function(x) unique( x[,1] ) )
-  return( unique( unlist( timepoints.per.track ) ) )
+  timepoints.per.track <- lapply( X, function(x) unique( x[,1] ) )
+  return( sort( unique( unlist( timepoints.per.track ) ) ) )
 }

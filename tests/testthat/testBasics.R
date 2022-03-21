@@ -8,7 +8,12 @@ test_that("turning angles work",{
 })
 
 test_that("maxTrackLength works",{
-	expect_equal( maxTrackLength(TCells), 39 )
-	expect_equal( maxTrackLength(BCells), 39 )
-	expect_equal( maxTrackLength(Neutrophils), 55 )
+	expect_equal( maxTrackLength(TCells), 40 )
+	expect_equal( maxTrackLength(BCells), 40 )
+	expect_equal( maxTrackLength(Neutrophils), 40 )
 })
+
+test_that("timePoints returns single vector when all tracks are equal length", {
+	tp <- timePoints( TCells[c(1,1) ])
+	expect_equal( ncol(tp), NULL )
+} )
