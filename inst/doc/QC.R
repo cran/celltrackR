@@ -1,28 +1,28 @@
-## ----setup, include=FALSE---------------------------------------------------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(dpi=72)
 
-## ----pack, warning = FALSE, message = FALSE---------------------------------------------------------------------------
+## ----pack, warning = FALSE, message = FALSE-----------------------------------
 library( celltrackR )
 library( ggplot2 )
 
-## ---- echo = FALSE----------------------------------------------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 # Save current par() settings
 oldpar <- par( no.readonly =TRUE )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 str( TCells, list.len = 1 )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 load( system.file("extdata", "TCellsRaw.rda", package="celltrackR" ) )
 load( system.file("extdata", "BCellsRaw.rda", package="celltrackR" ) )
 
-## ----Tdata------------------------------------------------------------------------------------------------------------
+## ----Tdata--------------------------------------------------------------------
 str( TCellsRaw, list.len = 1 )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 head( TCellsRaw[[1]] )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # for reproducibility
 set.seed(2021)
 
@@ -38,18 +38,18 @@ Tsample <- unique( c( Tsample, "5","9658","83","6080","7832","8352" ) )
 Tsample <- Tsample[ order(as.integer(Tsample)) ]
 TCellsRaw <- TCellsRaw[ Tsample ]
 
-## ----tracklength-check------------------------------------------------------------------------------------------------
+## ----tracklength-check--------------------------------------------------------
 # Each track has a coordinate matrix with one row per coordinate;
 # The number of steps is the number of rows minus one.
 track.lengths <- sapply( TCellsRaw, nrow ) - 1
 hist( track.lengths, xlab = "Track length (#steps)", breaks = seq(0,40 ) )
 summary( track.lengths )
 
-## ----max-tracklength--------------------------------------------------------------------------------------------------
+## ----max-tracklength----------------------------------------------------------
 # This is the number of coordinates, so the number of steps is one less.
 maxTrackLength( TCellsRaw )
 
-## ----filter-short-----------------------------------------------------------------------------------------------------
+## ----filter-short-------------------------------------------------------------
 # nrow() of a track is always the number of steps plus one.
 # For steps >= min.steps, we can substitute nrow > min.steps:
 filter.criterion <- function( x, min.steps ){
@@ -59,7 +59,7 @@ filter.criterion <- function( x, min.steps ){
 TCells.filtered <- filterTracks( filter.criterion, TCellsRaw, min.steps = 11 )
 # Or shorthand: filterTracks( function(x) nrow(x) > min.steps, TCellsRaw )
 
-## ----check-filtered---------------------------------------------------------------------------------------------------
+## ----check-filtered-----------------------------------------------------------
 # Find lengths of the filtered dataset
 track.lengths.filtered <- sapply( TCells.filtered, nrow ) - 1
 
@@ -70,7 +70,7 @@ c( "min length before filter" = min( track.lengths ),
 # Check how many tracks are left:
 length( TCells.filtered )
 
-## ---- fig.width=7, fig.height = 3.5-----------------------------------------------------------------------------------
+## ----fig.width=7, fig.height = 3.5--------------------------------------------
 # Drift is 0.05 micron/sec in each dimension
 drift.speed <- c( 0.05, 0.05, 0.05 )
 add.drift <- function( x, drift.vector )
@@ -100,13 +100,13 @@ abline( h = 0 )
 abline( v = 0 )
 
 
-## ---- fig.width = 4, fig.height = 3-----------------------------------------------------------------------------------
+## ----fig.width = 4, fig.height = 3--------------------------------------------
 hotellingsTest( TCellsRaw, col = "gray" )
 
-## ---- fig.width = 6, fig.height = 6-----------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 6--------------------------------------------
 hotellingsTest( BCellsRaw, col = "gray" )
 
-## ---- fig.width = 4, fig.height = 3.5---------------------------------------------------------------------------------
+## ----fig.width = 4, fig.height = 3.5------------------------------------------
 # Compute autocovariance, normalize so the first point lies at 1
 Tacov <- aggregate( TCellsRaw, overallDot )
 Tacov$value <- Tacov$value / Tacov$value[1]
@@ -119,17 +119,17 @@ Bacov$value <- Bacov$value / Bacov$value[1]
 plot( Tacov )
 points( Bacov, col = "red" )
 
-## ---- fig.width = 6, fig.height = 6-----------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 6--------------------------------------------
 hotellingsTest( BCellsRaw, col = "gray", step.spacing = 10 )
 
-## ---- fig.width = 4, fig.height = 4-----------------------------------------------------------------------------------
+## ----fig.width = 4, fig.height = 4--------------------------------------------
 hotellingsTest( TCells.drift, plot = TRUE, col = "gray", step.spacing = 10 )
 
-## ---- fig.width = 6, fig.height = 6-----------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 6--------------------------------------------
 hotellingsTest( TCellsRaw, dim = c("x","y","z"), step.spacing = 10 )
 hotellingsTest( TCells.drift, dim = c("x","y","z"), step.spacing = 10 )
 
-## ---- echo = FALSE, fig.width=7---------------------------------------------------------------------------------------
+## ----echo = FALSE, fig.width=7------------------------------------------------
 # sp <- seq(0,10)
 # 
 # htest.nodrift <- lapply( sp, function(x) hotellingsTest( TCells, 
@@ -169,7 +169,7 @@ hotellingsTest( TCells.drift, dim = c("x","y","z"), step.spacing = 10 )
 # 
 # gridExtra::grid.arrange(p1,p2,ncol=2)
 
-## ----cellPairs, warning = FALSE, message = FALSE, fig.width=6, fig.heigth = 2.5---------------------------------------
+## ----cellPairs, warning = FALSE, message = FALSE, fig.width=6, fig.heigth = 2.5----
 # compute for both original as drift data
 df.drift <- analyzeCellPairs( TCells.drift )
 df.norm <- analyzeCellPairs( TCellsRaw )
@@ -195,7 +195,7 @@ p.drift <- ggplot( df.drift, aes( x = dist, y = angle ) ) +
 
 gridExtra::grid.arrange( p.norm, p.drift, ncol = 2 )
 
-## ----stepPairs, warning = FALSE, message = FALSE, fig.width=6, fig.heigth = 2.5---------------------------------------
+## ----stepPairs, warning = FALSE, message = FALSE, fig.width=6, fig.heigth = 2.5----
 # compute for both original as drift data.
 df.drift <- analyzeStepPairs( TCells.drift, filter.steps = function(x) displacement(x)>2  )
 df.norm <- analyzeStepPairs( TCellsRaw, filter.steps = function(x) displacement(x)>2  )
@@ -221,7 +221,7 @@ p.drift <- ggplot( df.drift, aes( x = dist, y = angle ) ) +
 
 gridExtra::grid.arrange( p.norm, p.drift, ncol = 2 )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Get steps and find their displacement vectors
 steps.drift <- subtracks( TCells.drift, 1 )
 step.disp <- t( sapply( steps.drift, displacementVector ) )
@@ -233,7 +233,7 @@ mean.displacement <- colMeans( step.disp )
 drift.speed <- mean.displacement/timeStep( TCells.drift )
 drift.speed
 
-## ---- fig.width = 6, fig.height = 3.5---------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 3.5------------------------------------------
 correct.drift <- function( x, drift.vector )
 {
   # separate timepoints and coordinates
@@ -261,7 +261,7 @@ plot( TCellsRaw, col = "blue", main = "corrected", cex = 0, pch.start = NA, xlim
 plot( TCells.corrected, col = "red", add = TRUE, cex = 0, pch.start = NA  )
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Take the track with id "5"
 dup.track <- TCellsRaw[["5"]]
 
@@ -277,7 +277,7 @@ new.id <- max( as.numeric( names( TCellsRaw ) ) ) + 1
 names(dup.track) <- as.character( new.id )
 TCells.dup <- c( TCellsRaw, dup.track )
 
-## ---- warning = FALSE, fig.width = 3, fig.height = 2.5----------------------------------------------------------------
+## ----warning = FALSE, fig.width = 3, fig.height = 2.5-------------------------
 df <- analyzeCellPairs( TCells.dup )
 
 # label cellpairs that have both angle and distance below threshold
@@ -298,21 +298,21 @@ ggplot( df, aes( x = dist, y = angle ) ) +
   theme_classic()
 
 
-## ---- fig.width = 7, fig.height = 2.5---------------------------------------------------------------------------------
+## ----fig.width = 7, fig.height = 2.5------------------------------------------
 par( mfrow=c(1,3))
 plot( TCells.dup[c("5","9659") ] )
 plot( TCells.dup[c("83","6080") ] )
 plot( TCells.dup[c("7832","8352") ] )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 corrected.dup <- TCells.dup[ names( TCells.dup ) != "9659" ]
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 tracks <- TCellsRaw
 bb <- boundingBox( tracks )
 bb
 
-## ---- fig.width = 3, fig.height = 2-----------------------------------------------------------------------------------
+## ----fig.width = 3, fig.height = 2--------------------------------------------
 # Define points:
 lower1 <- c( bb["min","x"], bb["min","y"], bb["min","z"] )
 lower2 <- c( bb["max","x"], bb["min","y"], bb["min","z"] )
@@ -337,14 +337,14 @@ ggplot( df, aes( x = distances,
   scale_x_continuous( limits=c(0,zsize ), expand = c(0,0) ) +
   theme_classic()
 
-## ---- fig.width = 4, fig.height = 3-----------------------------------------------------------------------------------
+## ----fig.width = 4, fig.height = 3--------------------------------------------
 par( mar = c(5, 4, 0.5, 2) + 0.1 )
 plot( TCellsRaw, dims = c("x","z" ) )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 boundingBox( TCellsRaw )
 
-## ----get-steps--------------------------------------------------------------------------------------------------------
+## ----get-steps----------------------------------------------------------------
 # Extract all subtracks of length 1 (that is, all "steps")
 single.steps <- subtracks( TCellsRaw, 1 )
 
@@ -352,26 +352,26 @@ single.steps <- subtracks( TCellsRaw, 1 )
 # in the data (no longer grouped by the original cell they came from):
 str( single.steps, list.len = 3 )
 
-## ----check-avdt-------------------------------------------------------------------------------------------------------
+## ----check-avdt---------------------------------------------------------------
 median.dt <- timeStep( TCellsRaw )
 median.dt
 
-## ----check-dt---------------------------------------------------------------------------------------------------------
+## ----check-dt-----------------------------------------------------------------
 step.dt <- sapply( single.steps, duration )
 str(step.dt)
 
-## ----check-dt-hist----------------------------------------------------------------------------------------------------
+## ----check-dt-hist------------------------------------------------------------
 dt.diff.perc <- (step.dt - median.dt) * 100 / median.dt
 hist( dt.diff.perc, xlab = "dt (percentage difference from median)" )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 range( step.dt )
 unique( step.dt )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 sum( step.dt == 48 )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # This function randomly removes coordinates from a track dataset with probability "prob"
 remove.points <- function( track, prob=0.1 ){
   
@@ -385,7 +385,7 @@ remove.points <- function( track, prob=0.1 ){
 # Apply function to dataset to randomly remove coordinates in the data
 TCells.gap <- as.tracks( lapply( TCellsRaw, remove.points ) )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # duration of the individual steps
 steps.gap <- subtracks( TCells.gap, 1 )
 
@@ -394,12 +394,12 @@ T1.gap.disp <- sapply( steps.gap, displacement )
 
 lapply( list( original = T1.step.disp, gaps = T1.gap.disp ), summary )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 T1.norm.disp <- sapply( single.steps, normalizeToDuration( displacement ) )
 T1.norm.gap.disp <- sapply( steps.gap, normalizeToDuration( displacement ) )
 lapply( list( original = T1.norm.disp, gaps = T1.norm.gap.disp ), summary )
 
-## ---- fig.width=6-----------------------------------------------------------------------------------------------------
+## ----fig.width=6--------------------------------------------------------------
 
 # Repair gaps by splitting or interpolation, the number of tracks is 
 # different after each fix
@@ -409,10 +409,10 @@ interpolate.gap <- repairGaps( TCells.gap, how = "interpolate" )
 c( "after splitting" = length( split.gap),
    "after interpolation" = length( interpolate.gap ) )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 T2 <- subsample( TCellsRaw, k = 2 )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # displacement
 T1.steps <- subtracks( TCellsRaw, 1 )
 T1.disp <- sapply( T1.steps, displacement )
@@ -423,7 +423,7 @@ T2.disp <- sapply( T2.steps, displacement )
 lapply( list( T1 = T1.disp, T2 = T2.disp ), summary )
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # interpolate both datasets at the time resolution of the neutrophils
 dt <- timeStep( TCellsRaw )
 interpolate.dt <- function( x, dt, how = "spline" ){
@@ -447,31 +447,31 @@ lapply( list( T1 = T1.disp, T2 = T2.disp,
               T1.corr = T1.corr.disp, T2.corr = T2.corr.disp ), 
         summary )
 
-## ---- echo = FALSE----------------------------------------------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 # Reset par() settings
 par(oldpar)
 
-## ---- dpi = 100-------------------------------------------------------------------------------------------------------
+## ----dpi = 100----------------------------------------------------------------
 load( system.file("extdata", "TCellsRaw.rda", package="celltrackR" ) )
 
 par( mar = c(2, 2, 1, 1) + 0.1 )
 plot( TCellsRaw )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 cellSpeeds <- sapply( TCellsRaw, speed )
 hist( cellSpeeds, breaks = 30 )
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 cutoff <- 0.1 # 0.1 micron/sec = 6 micron/min
 loSpeed <- filterTracks( function(t) speed(t) < cutoff, TCellsRaw )
 hiSpeed <- filterTracks( function(t) speed(t) >= cutoff, TCellsRaw )
 
-## ---- fig.width = 6, fig.height = 3.5---------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 3.5------------------------------------------
 par(mfrow=c(1,2))
 plot( loSpeed, main = "Below cutoff" )
 plot( hiSpeed, main = "Above cutoff" )
 
-## ----bic-nonmotile----------------------------------------------------------------------------------------------------
+## ----bic-nonmotile------------------------------------------------------------
 bicNonMotile <- function( track, sigma ){
   
   # we'll use only x and y coordinates since we saw earlier that the z-dimension was
@@ -493,7 +493,7 @@ bicNonMotile <- function( track, sigma ){
   return( 3*log(nrow(allPoints)) - 2*logL )
 }
 
-## ---------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # the BIC for a given cutoff m
 bicAtCutoff <- function( track, m, sigma ){
   
@@ -532,7 +532,7 @@ bicMotile <- function( track, sigma ){
  	min( sapply( cutoffOptions, function(m) bicAtCutoff(track,m,sigma) ) )
 }
 
-## ---- fig.width = 6, fig.height = 3.5---------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 3.5------------------------------------------
 deltaBIC <- function( x, sigma ){
   b1 <- bicNonMotile( x, sigma )
   b2 <- bicMotile( x, sigma )
@@ -550,7 +550,7 @@ par(mfrow=c(1,2))
 plot( motile, main = "Motile" )
 plot( nonMotile, main = "Non-Motile" )
 
-## ---- fig.width = 4, fig.height = 3-----------------------------------------------------------------------------------
+## ----fig.width = 4, fig.height = 3--------------------------------------------
 plot( dBIC, cellSpeeds, xlim = c(0,20) )
 abline( v = 6, col = "red" ) # delta BIC cutoff
 abline( h = max(cellSpeeds), col = "blue", lty = 2 ) # max speed of all cells

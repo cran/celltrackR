@@ -32,7 +32,7 @@ hotellingsTest( TCells, step.spacing = 10 )
 hotellingsTest( BCells, step.spacing = 10 )
 hotellingsTest( Neutrophils, step.spacing = 10 )
 
-## ---- fig.width = 5, fig.height = 4-----------------------------------------------------------------------------------
+## ----fig.width = 5, fig.height = 4------------------------------------------------------------------------------------
 par( mfrow=c(3,1), mar = c(0,0,0,0) + 0.1 )
 plot( TCells, dims = c("x","z"), xaxt='n', yaxt = 'n', ann=FALSE )
 plot( BCells, dims = c("x","z"), xaxt='n', yaxt = 'n', ann=FALSE )
@@ -97,7 +97,7 @@ notAtBorder <- function( tracks, angleThreshold = 0.1, distanceThreshold = 1, ma
 }
 
 
-## ---- fig.width = 7, fig.height = 2.5---------------------------------------------------------------------------------
+## ----fig.width = 7, fig.height = 2.5----------------------------------------------------------------------------------
 par( mfrow=c(1,3) )
 old <- TCells
 TCells <- notAtBorder( TCells )
@@ -197,7 +197,7 @@ deltaBIC <- function( x, sigma ){
 }
 
 
-## ---- fig.width = 7, fig.height = 10----------------------------------------------------------------------------------
+## ----fig.width = 7, fig.height = 10-----------------------------------------------------------------------------------
 TCellsBIC <- sapply( TCells, deltaBIC, 7 )
 BCellsBIC <- sapply( BCells, deltaBIC, 7 )
 NeutrophilsBIC <- sapply( Neutrophils, deltaBIC, 7 )

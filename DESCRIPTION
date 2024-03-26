@@ -1,25 +1,27 @@
 Package: celltrackR
 Type: Package
 Title: Motion Trajectory Analysis
-Date: 2022-02-18
-Version: 1.1.0
-Authors@R: c(person("Johannes", "Textor", role = c("aut", "cre"),
+Date: 2024-03-25
+Version: 1.2.0
+Authors@R: c(person("Johannes", "Textor", role = c("aut","cre"),
                      email = "johannes.textor@gmx.de"),
               person("Katharina", "Dannenberg", role = "aut"),
               person("Jeffrey", "Berry", role = "aut" ),
               person("Gerhard", "Burger", role = "aut"),
               person("Annie","Liu", role= "aut"),
-              person("Inge", "Wortel", role = "aut",
+              person("Mark","Miller", role= "aut"),
+              person("Inge", "Wortel", role = c("aut"),
                      email = "ingewortel@gmail.com"))
 Author: Johannes Textor [aut, cre],
   Katharina Dannenberg [aut],
   Jeffrey Berry [aut],
   Gerhard Burger [aut],
   Annie Liu [aut],
+  Mark Miller [aut],
   Inge Wortel [aut]
 Maintainer: Johannes Textor <johannes.textor@gmx.de>
-Description: Provides methodology to analyze cells that move in a two- or three-dimensional
-	space. Available measures include displacement, confinement ratio, autocorrelation,
+Description: Methods for analyzing (cell) motion in two or three dimensions.
+	Available measures include displacement, confinement ratio, autocorrelation,
 	straightness, turning angle, and fractal dimension. Measures can be applied to entire tracks,
 	steps, or subtracks with varying length. While the methodology has been developed for
 	cell trajectory analysis, it is applicable to anything that moves including animals,
@@ -40,11 +42,11 @@ LazyData: true
 URL: http://www.motilitylab.net
 Imports: stats, grDevices, graphics, utils, ellipse, pracma
 Suggests: scatterplot3d, fractaldim, testthat, wordspace, knitr,
-        rmarkdown, uwot, dendextend, ggplot2, ggbeeswarm, gridExtra,
-        mvtnorm
-RoxygenNote: 7.1.1
+        rmarkdown, RSpectra, uwot, dendextend, ggplot2, ggbeeswarm,
+        gridExtra, mvtnorm, rjson
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-02-22 20:45:24 UTC; ingewortel
+Packaged: 2024-03-26 10:30:04 UTC; ingewortel
 Repository: CRAN
-Date/Publication: 2022-03-21 15:50:19 UTC
+Date/Publication: 2024-03-26 13:50:02 UTC

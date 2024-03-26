@@ -1,4 +1,8 @@
 ## ----setup, include = FALSE-------------------------------------------------------------------------------------------
+matrix_check <- ( packageVersion( "Matrix" ) > "1.6.1" )
+irlba_check <- ( packageVersion( "irlba" ) <= "2.3.5.1" )
+
+matrix_irlba_clash <- TRUE #( matrix_check & irlba_check )
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -75,6 +79,9 @@ trackFeatureMap( all.tracks,
                c(speed,meanTurningAngle,squareDisplacement,maxDisplacement,
                  outreachRatio ), method = "MDS",
                labels = real.celltype )
+
+## ----rspec, echo = FALSE, eval = matrix_irlba_clash-------------------------------------------------------------------
+library( RSpectra )
 
 ## ----umap-------------------------------------------------------------------------------------------------------------
 trackFeatureMap( all.tracks,

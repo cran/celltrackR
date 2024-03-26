@@ -5,7 +5,7 @@ knitr::opts_chunk$set(dpi=72)
 library( celltrackR )
 library( ggplot2 )
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 # Save current par() settings
 oldpar <- par( no.readonly =TRUE )
 
@@ -36,13 +36,13 @@ Nsample <- sample( names(Neutrophils),50)
 Neutrophils2 <- Neutrophils[ Nsample ]
 
 
-## ---- fig.width = 6, fig.height=2---------------------------------------------
+## ----fig.width = 6, fig.height=2----------------------------------------------
 par( mfrow = c(1,3), mar = c(2,2,3,1)+0.1 )
 plot( TCells2, main = "T cells" )
 plot( BCells2, main = "B cells" )
 plot( Neutrophils2, main = "Neutrophils" )
 
-## ---- fig.width = 8, fig.height=2.5-------------------------------------------
+## ----fig.width = 8, fig.height=2.5--------------------------------------------
 # load original, 3D tracks as an example, since the processed tracks are 2D
 load( system.file("extdata", "TCellsRaw.rda", package="celltrackR" ) )
 load( system.file("extdata", "BCellsRaw.rda", package="celltrackR" ) )
@@ -54,7 +54,7 @@ plot3d( TCellsRaw, main = "T cells", tick.marks = FALSE )
 plot3d( BCellsRaw, main = "B cells", tick.marks = FALSE )
 plot3d( NeutrophilsRaw, main = "Neutrophils", tick.marks = FALSE )
 
-## ---- fig.width = 6, fig.height=2---------------------------------------------
+## ----fig.width = 6, fig.height=2----------------------------------------------
 par( mfrow = c(1,3), mar = c(2,2,3,1)+0.1 )
 plot( normalizeTracks(TCells2), main = "T cells" )
 plot( normalizeTracks(BCells2), main = "B cells" )
@@ -157,10 +157,10 @@ stag
 ## ---------------------------------------------------------------------------------------------------------------------
 image( stag )
 
-## ---- fig.width=4-----------------------------------------------------------------------------------------------------
+## ----fig.width=4------------------------------------------------------------------------------------------------------
 filled.contour( stag )
 
-## ---- fig.width=4-----------------------------------------------------------------------------------------------------
+## ----fig.width=4------------------------------------------------------------------------------------------------------
 filled.contour( applyStaggered( TCells2[[1]], speed, matrix = TRUE ) )
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ num10 <- length( subtracks( TCells2, 10 ) )
 num35 <- length( subtracks( TCells2, 35 ) )
 c( "10" = num10, "35" = num35 )
 
-## ---- fig.width = 7---------------------------------------------------------------------------------------------------
+## ----fig.width = 7----------------------------------------------------------------------------------------------------
 # Combine into a single dataframe with one column indicating the celltype
 # To truly compare them, report subtrack length not in number of steps but
 # in their duration (which may differ between different datasets)
@@ -233,7 +233,7 @@ p1 <- ggplot( msddata, aes( x = dt , y = mean, color = cells, fill = cells ) ) +
 pzoom <- p1 + coord_cartesian( xlim = c(0,500), ylim = c(0,3000) ) 
 gridExtra::grid.arrange( p1, pzoom, ncol = 2 ) 
 
-## ---- fig.width=6-----------------------------------------------------------------------------------------------------
+## ----fig.width=6------------------------------------------------------------------------------------------------------
 Tcell.acor <- aggregate( TCells2, overallNormDot, FUN = "mean.se"  )
 Tcell.acor$dt <- Tcell.acor$i * timeStep(TCells2)
 Tcell.acor$cells <- "T cells"
@@ -247,7 +247,7 @@ ggplot( Tcell.acor, aes( x = dt , y = mean, color = cells, fill = cells ) ) +
   theme_classic() + 
   theme( axis.line.x = element_blank() )
 
-## ---- fig.width=6-----------------------------------------------------------------------------------------------------
+## ----fig.width=6------------------------------------------------------------------------------------------------------
 # Returns TRUE if first and last step of a track are of the minimum length of 1 micron
 check <- function(x){ 
   all( sapply( list(head(x,2),tail(x,2)), trackLength ) >= 1.0 )
@@ -269,7 +269,7 @@ ggplot( d, aes( x = dt , y = mean, color = cells, fill = cells ) ) +
   theme_classic() + 
   theme( axis.line.x = element_blank() )
 
-## ---- fig.width=6-----------------------------------------------------------------------------------------------------
+## ----fig.width=6------------------------------------------------------------------------------------------------------
 # autocovariance
 Tcell.acov <- aggregate( TCells2, overallDot, 
                      FUN = "mean.se", filter.subtracks = check )
@@ -286,7 +286,7 @@ ggplot( Tcell.acov, aes( x = dt , y = mean, color = cells, fill = cells ) ) +
   theme_classic() + 
   theme( axis.line.x = element_blank() )
 
-## ---- fig.width = 7---------------------------------------------------------------------------------------------------
+## ----fig.width = 7----------------------------------------------------------------------------------------------------
 # Normalized autocovariance
 Tcell.acov[,2:4] <- Tcell.acov[,2:4] / Tcell.acov$mean[1]
 
@@ -317,12 +317,12 @@ p1 <- ggplot( acovdata, aes( x = dt , y = mean, color = cells, fill = cells ) ) 
 pzoom <- p1 + coord_cartesian( xlim = c(0,500), ylim  = c(-0.1,1) )
 gridExtra::grid.arrange( p1, pzoom, ncol = 2 )
 
-## ---- fig.width = 6, fig.height = 3-----------------------------------------------------------------------------------
+## ----fig.width = 6, fig.height = 3------------------------------------------------------------------------------------
 par( mfrow=c(1,2) )
 plot( Neutrophils2 )
 hotellingsTest( Neutrophils2, plot = TRUE, col = "gray", step.spacing = 10 )
 
-## ---- fig.width = 7---------------------------------------------------------------------------------------------------
+## ----fig.width = 7----------------------------------------------------------------------------------------------------
 # Directional movement is 0.05 micron/sec in each dimension
 directional.speed <- c( 0.05, 0.05 )
 add.dir <- function( x, speed.vector )
@@ -349,7 +349,7 @@ TCells2.dir <- as.tracks( lapply( TCells2, add.dir, directional.speed ) )
 # plot(TCells2, main = "original data" )
 # plot(TCells2.dir, main = "with directional bias" )
 
-## ---- fig.width = 6---------------------------------------------------------------------------------------------------
+## ----fig.width = 6----------------------------------------------------------------------------------------------------
 step.angles <- sapply( subtracks( TCells2.dir, 1), angleToDir, dvec = c(1,1) )
 step.angles.original <- sapply( subtracks( TCells2, 1 ), angleToDir, dvec = c(1,1) )
 par(mfrow=c(1,2) )
@@ -372,7 +372,7 @@ plot( TCells2.point, main = "with point attraction" )
 ## ---------------------------------------------------------------------------------------------------------------------
 hotellingsTest( TCells2.point, step.spacing = 10, col = "gray" )
 
-## ---- fig.width = 7---------------------------------------------------------------------------------------------------
+## ----fig.width = 7----------------------------------------------------------------------------------------------------
 step.angles <- sapply( subtracks( TCells2.point, 1), angleToPoint, p = c(0,0) )
 step.angles.original <- sapply( subtracks( TCells2, 1 ), angleToPoint, p = c(0,0) )
 par(mfrow=c(1,2) )
@@ -404,7 +404,7 @@ ggplot( df.cells, aes( x = dist, y = angle ) ) +
   geom_hline( yintercept = 90, color = "black" ) +
   theme_classic()
 
-## ---- warning = FALSE, message = FALSE--------------------------------------------------------------------------------
+## ----warning = FALSE, message = FALSE---------------------------------------------------------------------------------
 df.steps <- analyzeStepPairs( TCells2, filter.steps = function(x) displacement(x)>2  )
 
 # Plot
@@ -417,7 +417,7 @@ ggplot( df.steps, aes( x = dist, y = angle ) ) +
   theme_classic()
 
 
-## ---- echo = FALSE----------------------------------------------------------------------------------------------------
+## ----echo = FALSE-----------------------------------------------------------------------------------------------------
 # Reset par() settings
 par(oldpar)
 

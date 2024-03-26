@@ -5,7 +5,7 @@ knitr::opts_chunk$set(dpi=72)
 library( celltrackR )
 library( ggplot2 )
 
-## ---- echo = FALSE----------------------------------------------------------------------------------------------------
+## ----echo = FALSE-----------------------------------------------------------------------------------------------------
 # Save current par() settings
 oldpar <- par( no.readonly =TRUE )
 
@@ -123,7 +123,7 @@ fast.tracks <- selectTracks( t, speed, median.speed, Inf )
 c( "all tracks" = mean( sapply( t, speed ) ),
    "fastest half" = mean( sapply( fast.tracks, speed ) ) )
 
-## ---- fig.width = 7, fig.height = 3.5---------------------------------------------------------------------------------
+## ----fig.width = 7, fig.height = 3.5----------------------------------------------------------------------------------
 # Lower resolution
 lower.res <- subsample( t, k = 2 )
 
@@ -183,7 +183,7 @@ str( as.tracks( t.list ), list.len = 3 )
 str( as.tracks( t.df ), list.len = 3 )
 
 
-## ---- echo = FALSE----------------------------------------------------------------------------------------------------
+## ----echo = FALSE-----------------------------------------------------------------------------------------------------
 # Reset par() settings
 par(oldpar)
 
