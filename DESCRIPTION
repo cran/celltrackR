@@ -1,8 +1,8 @@
 Package: celltrackR
 Type: Package
 Title: Motion Trajectory Analysis
-Date: 2024-03-25
-Version: 1.2.0
+Date: 2024-08-23
+Version: 1.2.1
 Authors@R: c(person("Johannes", "Textor", role = c("aut","cre"),
                      email = "johannes.textor@gmx.de"),
               person("Katharina", "Dannenberg", role = "aut"),
@@ -40,13 +40,13 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: http://www.motilitylab.net
-Imports: stats, grDevices, graphics, utils, ellipse, pracma
+Imports: stats, grDevices, graphics, utils, ellipse, pracma, methods
 Suggests: scatterplot3d, fractaldim, testthat, wordspace, knitr,
         rmarkdown, RSpectra, uwot, dendextend, ggplot2, ggbeeswarm,
-        gridExtra, mvtnorm, rjson
-RoxygenNote: 7.2.3
+        gridExtra, mvtnorm, jsonlite, httr, curl
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-03-26 10:30:04 UTC; ingewortel
+Packaged: 2024-08-26 11:48:14 UTC; ingewortel
 Repository: CRAN
-Date/Publication: 2024-03-26 13:50:02 UTC
+Date/Publication: 2024-08-26 12:20:02 UTC

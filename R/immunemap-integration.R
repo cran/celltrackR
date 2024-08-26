@@ -48,7 +48,7 @@
 #' \code{get.immap.tracks} to extract the tracks, and  \code{\link{get.immap.metadata}}
 #' to read the metadata. 
 #' 
-#' @note This functionality requires the rjson package to be installed.
+#' @note This functionality requires the jsonlite package to be installed.
 #'
 #' @seealso \code{\link{get.immap.metadata}}.
 #'
@@ -74,6 +74,7 @@ read.immap.json <- function( url, tracks.url = NULL, keep.id = TRUE, scale.auto 
 
 	# Read json from file or url; error if not json
 	input <- parse.immap.json( tracks.url )
+	if( is.null( input ) ) return(NULL)
 	
 	# Check format of the input list.
 	.check.immap.json( input )
@@ -120,6 +121,11 @@ read.immap.json <- function( url, tracks.url = NULL, keep.id = TRUE, scale.auto 
 }
 
 .check.immap.json <- function( json.input ){
+
+	if( is.null( json.input ) ){
+		return(NULL)
+	}
+
 	# Input must be a list, elements must correspond with tracks (check.immap.single)
 	if( !is.list(json.input) ){
 		stop( "Error reading from immunemap. Expecting a list of tracks, please check the format." )
@@ -189,11 +195,49 @@ read.immap.json <- function( url, tracks.url = NULL, keep.id = TRUE, scale.auto 
 #' @rdname ReadImmuneMap
 #' @export
 parse.immap.json <- function( url ){
-	if( !requireNamespace("rjson", quietly=TRUE ) ){
-      stop( "Trying to read tracks from ImmuneMap: please install the 'rjson' package to use this functionality!" )
-    }
 
-	input <- tryCatch( rjson::fromJSON( file = url ), 
+	jsonlite.pack <- requireNamespace("jsonlite", quietly=TRUE )
+	
+	if( !jsonlite.pack ){
+      stop( "Trying to read tracks from ImmuneMap json format. Please make sure the package 'jsonlite' is installed to use this functionality." )
+    }
+	
+	curl.pack <- requireNamespace("curl", quietly=TRUE )
+	httr.pack <- requireNamespace("httr", quietly=TRUE)
+
+	if( any( !curl.pack, !httr.pack ) ){
+      stop( "Trying to read tracks from ImmuneMap online. Please make sure the packages 'httr' and 'curl' are installed to use this functionality." )
+    }
+    
+    # check if the url is a web page rather than a local url; if so, extra checks
+    if( grepl( "api.immunemap.org", url ) ){
+        # First check internet connection and status of the page. 
+		# policy "gracefully fail" with message (not error/warning) if page unavailable.
+		if (!curl::has_internet()) {
+			stop("Failed to read tracks from immunemap: no internet connection.")
+			return(NULL)
+		}
+	
+		# Informative messages for timeout or http status > 400 
+		resp <- tryCatch(
+		  httr::GET(url = url), #, httr::timeout(2)),
+		  error = function(e) conditionMessage(e),
+		  warning = function(w) conditionMessage(w)
+		)
+		if (!methods::is( resp, "response" )) {
+			stop(resp)
+		}
+	
+		if (httr::http_error(resp)) { 
+			httr::message_for_status(resp)
+			stop(resp)
+		}  	
+
+    }
+    
+  	
+  	# do throw an error when the format is not json.
+	input <- tryCatch( jsonlite::fromJSON( url, simplifyDataFrame=FALSE, simplifyMatrix=FALSE ), 
 		error = function(cond){ 
 			message(paste("Error reading url/file:", url))
 			message("Are you sure this is a json file? Here's the original error message:")
@@ -201,6 +245,9 @@ parse.immap.json <- function( url ){
 	} )
 	return(input)
 }
+
+
+
 
 #' @rdname ReadImmuneMap
 #' @export
@@ -285,6 +332,7 @@ get.immap.tracks <- function( input, keep.id = TRUE, scale.t = NULL, scale.pos =
 #'  the values for each track. 
 #'
 #' @examples
+#' \dontrun{
 #' ## Read tracks from immunemap online
 #' input <- parse.immap.json( url = "https://api.immunemap.org/video/14/tracks" )
 #' meta.df <- get.immap.metadata( input )
@@ -292,7 +340,8 @@ get.immap.tracks <- function( input, keep.id = TRUE, scale.t = NULL, scale.pos =
 #' ## Repeat but ignore also the 'color' column:
 #' exclude <-  c("points", "cellTypeObject","date", "color")
 #' meta.df <- get.immap.metadata( input, exclude.names = exclude )
-#'
+#' }
+#' 
 #' @export
 get.immap.metadata <- function( input, warn.exclude = TRUE, exclude.names = c("points", "cellTypeObject", "date" ) ){
 	
