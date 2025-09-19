@@ -12,7 +12,7 @@
 
 <meta name="author" content="Inge Wortel" />
 
-<meta name="date" content="2024-08-26" />
+<meta name="date" content="2025-09-19" />
 
 <title>Quality Control and Preprocessing</title>
 
@@ -50,8 +50,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -62,7 +63,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -340,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Quality Control and Preprocessing</h1>
 <h4 class="author">Inge Wortel</h4>
-<h4 class="date">2024-08-26</h4>
+<h4 class="date">2025-09-19</h4>
 
 
 
@@ -807,7 +808,7 @@ coordinates:</p>
 <span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a>TCells.dup <span class="ot">&lt;-</span> <span class="fu">c</span>( TCellsRaw, dup.track )</span></code></pre></div>
 <p>This can again be detected by plotting the angle between cell pairs
 versus the distance between cell pairs (see also section 2.3 above and
-<a href="https:/pubmed.ncbi.nlm.nih.gov/19834485/">Beltman et al
+<a href="https://pubmed.ncbi.nlm.nih.gov/19834485/">Beltman et al
 (2009)</a>):</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">analyzeCellPairs</span>( TCells.dup )</span>
 <span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a></span>

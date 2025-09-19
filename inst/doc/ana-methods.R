@@ -67,7 +67,7 @@ str( Tcell.speeds )
 summary( Tcell.speeds )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  hist( Tcell.speeds )
+# hist( Tcell.speeds )
 
 ## -----------------------------------------------------------------------------
 Bcell.speeds <- sapply( BCells2, speed )

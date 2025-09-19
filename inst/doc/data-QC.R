@@ -230,34 +230,34 @@ plot( Neutrophils, main = "Neutrophils (motile)" )
 plot( NNonMotile, main = "Neutrophils (non-motile)" )
 
 ## ----eval = FALSE-----------------------------------------------------------------------------------------------------
-#  checkPotentialDoubles <- function( tracks, distanceThreshold = 10, angleThreshold = 10 ){
-#    # na.omit because when cells do not share time points, their distance is NA.
-#    pairs <- na.omit( analyzeCellPairs( tracks ) )
-#    check <- pairs[ pairs$dist <= distanceThreshold & pairs$angle <= angleThreshold, ]
-#  
-#    # return if no pairs to check
-#    if( nrow(check) == 0 ){
-#      message("No suspicious pairs found!")
-#      return(NULL)
-#    }
-#  
-#    # Plot suspicious pairs; let user navigate with keystrokes:
-#    oldpar <- par()
-#    par( mfrow=c(2,2), mar=c(0, 0, 4, 0))
-#    for( i in 1:nrow( check ) ) {
-#      c1 <- pairs$cell1[i]; c2 <- pairs$cell2[i]
-#      plot( tracks[c(c1,c2)], main = paste0( c1,"-",c2),axes=FALSE,
-#          frame.plot=TRUE, xlab=NA, ylab=NA )
-#      if( i %% 4 == 0 ) invisible(readline(prompt="Press [enter] to continue"))
-#    }
-#    par( oldpar )
-#  
-#    return(check)
-#  }
-#  
-#  checkPotentialDoubles( TCells )
-#  checkPotentialDoubles( BCells )
-#  checkPotentialDoubles( Neutrophils )
+# checkPotentialDoubles <- function( tracks, distanceThreshold = 10, angleThreshold = 10 ){
+#   # na.omit because when cells do not share time points, their distance is NA.
+#   pairs <- na.omit( analyzeCellPairs( tracks ) )
+#   check <- pairs[ pairs$dist <= distanceThreshold & pairs$angle <= angleThreshold, ]
+# 
+#   # return if no pairs to check
+#   if( nrow(check) == 0 ){
+#     message("No suspicious pairs found!")
+#     return(NULL)
+#   }
+# 
+#   # Plot suspicious pairs; let user navigate with keystrokes:
+#   oldpar <- par()
+#   par( mfrow=c(2,2), mar=c(0, 0, 4, 0))
+#   for( i in 1:nrow( check ) ) {
+#     c1 <- pairs$cell1[i]; c2 <- pairs$cell2[i]
+#     plot( tracks[c(c1,c2)], main = paste0( c1,"-",c2),axes=FALSE,
+#         frame.plot=TRUE, xlab=NA, ylab=NA )
+#     if( i %% 4 == 0 ) invisible(readline(prompt="Press [enter] to continue"))
+#   }
+#   par( oldpar )
+# 
+#   return(check)
+# }
+# 
+# checkPotentialDoubles( TCells )
+# checkPotentialDoubles( BCells )
+# checkPotentialDoubles( Neutrophils )
 
 ## ---------------------------------------------------------------------------------------------------------------------
 # Check median dt for all datasets:
